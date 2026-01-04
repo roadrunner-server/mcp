@@ -3,9 +3,14 @@ package rrmcp
 import (
 	"context"
 	"log"
+	"sync"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
+
+// worker pool - pass a name and description to the worker
+// logger
+// configurer - what configuration options do we need?
 
 const pluginName = "mcp"
 
@@ -34,4 +39,11 @@ func (p *Plugin) Stop() error {
 
 func (p *Plugin) Name() string {
 	return pluginName
+}
+
+func (p *Plugin) RPC() any {
+	return &rpc{
+		p:  p,
+		mu: &sync.Mutex{},
+	}
 }
