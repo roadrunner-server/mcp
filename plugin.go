@@ -55,6 +55,12 @@ func (p *Plugin) Serve() chan error {
 
 	p.mu.Lock()
 	defer p.mu.Unlock()
+
+	// add user defined tools
+	for _, tool := range p.mcpTools {
+		mcp.AddTool(p.server, &mcp.Tool{Name: tool.Name(), Description: tool.Description()}, tool.Tool)
+	}
+
 	// Create a server with a single tool.
 	mcp.AddTool(p.server, &mcp.Tool{Name: "test", Description: "say hi"}, sendToWorker)
 	// Run the server over stdin/stdout, until the client disconnects.
